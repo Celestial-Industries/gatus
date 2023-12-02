@@ -38,7 +38,6 @@ jobs:
           sops --decrypt ./config.enc.yaml > config.yaml 
 
       - name: Debug-1
-        id: get-sops-version
         run: |
           cat config.yaml
           echo ''
