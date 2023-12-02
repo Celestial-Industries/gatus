@@ -26,14 +26,15 @@ jobs:
           echo "go_version=$go_version" >> $GITHUB_ENV
         shell: bash
       
-      - name: Debug
-        run: |
-          echo ${{ steps.get-go-version.outputs.go_version }} | sed 's/./& /g'
-
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ steps.get-go-version.outputs.go_version }}
+
+      - name: Build Gatus Go binary
+        run: |
+          # From Gatus Dockerfile
+          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus .
 
       # - name: Build and Publish
       #   uses: mplatform/mplatform@v4
