@@ -19,7 +19,7 @@ jobs:
       - name: Get Go version
         id: get-go-version
         run: |
-          # Extract Go version from go.mod
+          # Extract Go version from go.mod in Gatus repo
           go_version=$(grep -oP '^go \K[^\s]+' go.mod)
 
           # Set up Go with the extracted version
@@ -27,7 +27,7 @@ jobs:
         shell: bash
       
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ steps.get-go-version.outputs.go_version }}
 
@@ -43,7 +43,13 @@ jobs:
       - name: Debug2
         run: |
           ls -la
-          
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gatus
+          path: ./gatus
+
       # - name: Build and Publish
       #   uses: mplatform/mplatform@v4
       #   with:
