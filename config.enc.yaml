@@ -1,4 +1,5 @@
 # Gatus Config
+
 # storage:
 #   type: sqlite
 #   path: /data/data.db
