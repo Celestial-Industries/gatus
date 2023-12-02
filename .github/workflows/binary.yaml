@@ -63,24 +63,24 @@ jobs:
 #linux/arm64
 
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
+      # - name: Set up Go
+      #   uses: actions/setup-go@v2
+      #   with:
+      #     go-version: 1.17
 
-      - name: Build and Save Binaries
-        run: |
-          go build -o binary-linux-amd64 ./path/to/main.go
-          go build -o binary-linux-arm64 ./path/to/main.go
-          go build -o binary-windows-amd64.exe ./path/to/main.go
-          go build -o binary-darwin-amd64 ./path/to/main.go
+      # - name: Build and Save Binaries
+      #   run: |
+      #     go build -o binary-linux-amd64 ./path/to/main.go
+      #     go build -o binary-linux-arm64 ./path/to/main.go
+      #     go build -o binary-windows-amd64.exe ./path/to/main.go
+      #     go build -o binary-darwin-amd64 ./path/to/main.go
 
-      - name: Upload Binaries
-        uses: actions/upload-artifact@v2
-        with:
-          name: binaries
-          path: |
-            binary-linux-amd64
-            binary-linux-arm64
-            binary-windows-amd64.exe
-            binary-darwin-amd64
+      # - name: Upload Binaries
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: binaries
+      #     path: |
+      #       binary-linux-amd64
+      #       binary-linux-arm64
+      #       binary-windows-amd64.exe
+      #       binary-darwin-amd64
