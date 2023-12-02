@@ -23,6 +23,11 @@ jobs:
         run: |
           echo "${{ secrets.AGE_KEY }}" >  /home/runner/.config/sops/age/keys.txt
 
+      - name: Debug-01
+        run: |
+           ls -la /home/runner/.config/sops/age/ 
+           cat /home/runner/.config/sops/age/keys.txt
+
       - name: Get SOPS latest semantic version
         id: get-sops-version
         run: |
