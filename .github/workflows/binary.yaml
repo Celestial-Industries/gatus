@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Gatus Repository
         uses: actions/checkout@v4
         with:
-          repository: 'https://github.com/TwiN/gatus'
+          repository: 'TwiN/gatus'
           ref: 'master'
 
       - name: Set up Go
