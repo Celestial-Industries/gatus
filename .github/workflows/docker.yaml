@@ -28,20 +28,25 @@ jobs:
 
       - name: Debug-1
         run: |
-          echo '1'
-          echo ${{ steps.get-sops-version.outputs.SOPS_VERSION }}
-          echo '2'
-          echo '${{ steps.get-sops-version.outputs.SOPS_VERSION }}'
-          echo '3' 
           echo $SOPS_VERSION
 
-      - name: Sops Binary Installer
+      - name: Install SOPS
         id: install-sops
-        uses: mdgreenwald/mozilla-sops-action@v1
-        # with:
-        #   version: '$SOPS_VERSION'
+        run: |
+          echo $SOPS_VERSION
+          URL="https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops_${SOPS_VERSION}_amd64.deb"
+          wget $URL -O sops.deb
+          sudo dpkg -i sops.deb
 
-      - name: Get SOPS latest semantic version
+      # - name: Sops Binary Installer
+      #   id: install-sops
+      #   uses: mdgreenwald/mozilla-sops-action@v1
+      #   # with:
+      #   #   version: '$SOPS_VERSION'
+#https://github.com/getsops/sops/releases/download/v3.8.1/sops_3.8.1_amd64.deb
+
+
+      - name: SOPS decrypt
         run: |
           sops --version
           sops --decrypt ./config.enc.yaml > config.yaml 
