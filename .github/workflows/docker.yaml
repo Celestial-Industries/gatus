@@ -28,9 +28,12 @@ jobs:
 
       - name: Debug-1
         run: |
+          echo '1'
           echo ${{ steps.get-sops-version.outputs.SOPS_VERSION }}
-          echo ''
+          echo '2'
           echo '${{ steps.get-sops-version.outputs.SOPS_VERSION }}'
+          echo '3' 
+          echo $SOPS_VERSION
 
       - name: Sops Binary Installer
         id: install-sops
