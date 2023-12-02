@@ -23,7 +23,7 @@ ui:
           link: https://www.linkedin.com/in/garymcdermott
 alerting:
     slack:
-        webhook-url: ENC[AES256_GCM,data:stLHN2wopY9/lK/ijcJIseGamJie00CsfFnkTsuZ1Qj2vGwS4BOdtGr+MkE61K8l5DHnQKrfBnAJnh6FQ/AIE2smuBsOIMzZthSyWgEqhA==,iv:ee1EC7mEqUI03DwVlbB+FqDwkyr/qEvrNAwcg525BRQ=,tag:BTKbKnuLzOyDwYsZRrnIYA==,type:str]
+        webhook-url: ENC[AES256_GCM,data:biMgaQuPDhi7WMgocO2YyLHZpp9jYN13FJ1wum5EUHaHk4PrqFsD+oa45qFSJHvVO3HdTbiSaPs6Po031hecU8Of5HgEfK1kNAJ4URND0g==,iv:eCv224S5qk1P1OXibjWRiyZwBU3SOwQd87+AdYaRtug=,tag:YenFB6n9fVn9kXcMFDvE5A==,type:str]
         default-alert:
             description: Healthcheck failed 3 times in a row
             send-on-resolved: true
@@ -203,14 +203,14 @@ sops:
         - recipient: age148cexwa3lg8m7qxh6tdw90q2ntpngx2v8kvjw2xcdkp6kpq7n5nsxls8k8
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAwempvdE9jMGw5OFRXUGlp
-            WWRVeld4ZkRZM3hhNlAyU0trdHIxRVRoQW5nCnlyMmpxV1lUNWZIQ3dYZERqdEpi
-            ZHN4M1JUZTdvSzN1L3I3YW1EWDNhUjQKLS0tIFZ0bFY0cFdTMFpFSkhzY1FJZmc3
-            b3JCRWRsY3BEUEk1c3h2ZkczcXA3OVEKxOyKR8O8OnrLzAffycjYzZmPYug75pbo
-            H85Rs+2m7Q80UYljlcQ/Kh63uaieqdXNyqQP6iz0RlLVVbEMVnXeTA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBKYTlBdUlKTVhIQzhBRzdG
+            VlIwY0huZEFXNjZOR2UwTlFxakNaWEZkL2hJCjBJTlc1S0tiYTVZcUxaa3IrTG5p
+            a3BncG1OM2tneXFPaTBFdUZyb2ZFWWMKLS0tIDlxalNjcDN1RXFjVzBveGtRSXRN
+            b1ZwQXdWb0FtQ3E4R0xWQ1h4YmpBVXMKVdhqvBBDzZ26+YFZFZOqlZWHijfT9xwL
+            T1zfLGhiPhb57y8Kf4RfaHngWCkbtx+hLsWho2YtLk7w8qv3p1HsUg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-12-02T20:03:07Z"
-    mac: ENC[AES256_GCM,data:p5zsQ5YFHpTpNNZJ/bs4b6DpXZ01Ve9++pFdtGVHoEuOsd35duzeQC6qL42ykuosVv0Lsz9+mkbE+tO+NlbshaxZz81ln+rayZbJfWzBjAZh6Z6ZxyGWcVVuJtjen4RAH4jS20pgvJm1Mhc6wGtp+btFBnxzHpaygR8m/k0KVII=,iv:jvb2+40Uhs/6M3KIXHt9zig+KmcOT/F0goo1RZI5wz4=,tag:l/kXf/06+jJFAxENMrTfuQ==,type:str]
+    lastmodified: "2023-12-02T21:57:03Z"
+    mac: ENC[AES256_GCM,data:sq0pAsEJ4eL/QNeEuH5XeLwf+MRvIUSV9p5NVKPHfUgpt/+5yoxdPttZqaPbg/JQKKQld9IqRsl9989AngvxM7qDsXDY+v/pQK9t/6zvBqyh5lgPqnG9kEEtJ3CUnEjflxrZMvEGGFzsdshkTtYdBhmvkB48cVyJ2Yd0djMttBA=,iv:lJHjOnN/n8z3yDjXc6NhV40MSLJrfBKOf+q7X55m5Tk=,tag:nGMoKjhWBGUYgEL0hECZSA==,type:str]
     pgp: []
     encrypted_regex: ^(webhook-url)$
     version: 3.7.2

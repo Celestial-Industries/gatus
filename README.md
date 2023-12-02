@@ -17,7 +17,7 @@ Various [conditions](https://gatus.io/docs/conditions) are used to evaluate the 
 
 ## Alerting 
 
-It also intergrates with several tools for alerting. [Slack](https://gatus.io/docs/alerting-slack) is the chosen method in this case.
+It also intergrates with several tools for alerting. [Slack](https://gatus.io/docs/alerting-slack) is the chosen method in this case. The Slack app can be found [here](https://api.slack.com/apps/A055J67H126/install-on-team) and the Webhook URL can be rotated if required.
 
 ## Docker Image
 
@@ -33,12 +33,28 @@ GitHub action will clone the offical [Gautus repo](https://github.com/TwiN/gatus
 
 [Sops](https://github.com/getsops/sops) and [Age](https://github.com/FiloSottile/age) are sed to encrypt specific sensitive values in the YAML config file.
 
+
+### Encryption
+
 ``` bash
 age-keygen -o key.txt
-export SOPS_AGE_KEY_FILE=$(pwd)'/key.txt
+export SOPS_AGE_KEY_FILE=$(pwd)'/key.txt'
 sops --encrypt --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") --encrypted-regex '^INSERT_REGEX$' --in-place ./<FILENAME>
  sops --encrypt --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") --encrypted-regex '^(webhook-url)$' --in-place ./config.enc.yaml
 ```
 
-In the GH workflows for GH action binary and the docker actions this file is decrypted as one of the initial steps.
+In the GH workflows for GH action for docker SOPS is installed and the AGE key is retrieved from a GH secret and ussed to decrypt the `config.enc.yaml`.
 
+### Decryption
+
+To edit the `config.enc.yaml` locally run:
+
+``` bash
+sops --decrypt ./config.enc.yaml > conifg.yaml
+sops --encrypt --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") --encrypted-regex '^(webhook-url)$' ./config.yaml > config.enc.yaml
+```
+
+Remove unencrypted file afterwards although it is excluded via `.gitignore` if named `config.yaml`.
+``` bash
+rm config.yaml
+```
