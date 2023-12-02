@@ -22,8 +22,9 @@ jobs:
       - name: Setup AGE key for decryption for SOPS
         run: |
           echo "${{ secrets.AGE_KEY }}" >  keys.txt
-          SOPS_AGE_KEY_FILE=$(pwd)/keys.txt
-          echo "SOPS_AGE_KEY_FILE=$(pwd)/keys.txt" >> $GITHUB_ENV          
+          # Below works but Id rather set it in the decrypt comand
+          # SOPS_AGE_KEY_FILE=$(pwd)/keys.txt
+          # echo "SOPS_AGE_KEY_FILE=$(pwd)/keys.txt" >> $GITHUB_ENV
 
       - name: Get SOPS latest semantic version
         id: get-sops-version
@@ -42,8 +43,7 @@ jobs:
 
       - name: SOPS decrypt
         run: |
-          sops --version
-          sops --decrypt ./config.enc.yaml > config.yaml 
+          sops --decrypt  --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") ./config.enc.yaml > config.yaml 
 
       - name: Debug-1
         run: |
