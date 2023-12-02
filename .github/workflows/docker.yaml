@@ -22,7 +22,8 @@ jobs:
       - name: Get SOPS latest semantic version
         id: get-sops-version
         run: |
-          SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | grep -oP '"tag_name": "\K[^"]+')
+          #SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | grep -oP '"tag_name": "\K[^"]+')
+          SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | grep -oP '"tag_name": "\K[^"]+' | sed 's/^v//')
           echo $SOPS_VERSION
           echo "SOPS_VERSION=$SOPS_VERSION" >> $GITHUB_ENV
 
@@ -34,7 +35,7 @@ jobs:
         id: install-sops
         run: |
           echo $SOPS_VERSION
-          URL="https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops_${SOPS_VERSION}_amd64.deb"
+          URL="https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_amd64.deb"
           wget $URL -O sops.deb
           sudo dpkg -i sops.deb
 
