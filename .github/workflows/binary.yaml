@@ -1,0 +1,86 @@
+name: Go Binary
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Gatus Repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'https://github.com/TwiN/gatus'
+          ref: 'master'
+
+      - name: Set up Go
+        id: setup-go
+        run: |
+          # Extract Go version from go.mod
+          go_version=$(grep -oP '^go \K[^\s]+' go.mod)
+
+          # Set up Go with the extracted version
+          echo "::set-output name=go_version::$go_version"
+        shell: bash
+      
+      - name: Debug
+        run: |
+          echo ${{ steps.setup-go.outputs.go_version }} | sed 's/./& /g'
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ steps.setup-go.outputs.go_version }}
+
+      # - name: Build and Publish
+      #   uses: mplatform/mplatform@v4
+      #   with:
+      #     targets: linux/amd64,linux/arm64  # Specify the architectures you want to build for
+      #     build_args: -o myapp  # Specify your build command and output name
+  
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: release
+      #     path: myapp
+
+      # - name: Generate build files
+      #   uses: thatisuday/go-cross-build@v1
+      #   with:
+      #       platforms: 'linux/amd64, darwin/amd64, windows/amd64'
+      #       package: 'demo'
+      #       name: 'program'
+      #       compress: 'true'
+      #       dest: 'dist'
+
+
+#linux/386
+#linux/amd64
+#linux/arm
+#linux/arm64
+
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Build and Save Binaries
+        run: |
+          go build -o binary-linux-amd64 ./path/to/main.go
+          go build -o binary-linux-arm64 ./path/to/main.go
+          go build -o binary-windows-amd64.exe ./path/to/main.go
+          go build -o binary-darwin-amd64 ./path/to/main.go
+
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: binaries
+          path: |
+            binary-linux-amd64
+            binary-linux-arm64
+            binary-windows-amd64.exe
+            binary-darwin-amd64
