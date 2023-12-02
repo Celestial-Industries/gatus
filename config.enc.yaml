@@ -1,0 +1,216 @@
+# Gatus Config
+# storage:
+#   type: sqlite
+#   path: /data/data.db
+# Cant seem to get this working
+# security:
+#   basic:
+#     username: "admin"
+#     password-bcrypt-base64: "YidiL1JhSmVMYTRiTG1YcmliYngvQU1tMlBON1NTYXcwWVFnWnpHJw=="
+#     # gothetooKiew2qu
+web:
+    port: 80
+ui:
+    title: Health Dashboard
+    description: Gatus monitoring dashboard
+    header: Health Status
+    buttons:
+        - name: Blog
+          link: https://garymcdermott.net/
+        - name: GitHub
+          link: https://github.com/mcdermg
+        - name: LinkedIn
+          link: https://www.linkedin.com/in/garymcdermott
+alerting:
+    slack:
+        webhook-url: ENC[AES256_GCM,data:stLHN2wopY9/lK/ijcJIseGamJie00CsfFnkTsuZ1Qj2vGwS4BOdtGr+MkE61K8l5DHnQKrfBnAJnh6FQ/AIE2smuBsOIMzZthSyWgEqhA==,iv:ee1EC7mEqUI03DwVlbB+FqDwkyr/qEvrNAwcg525BRQ=,tag:BTKbKnuLzOyDwYsZRrnIYA==,type:str]
+        default-alert:
+            description: Healthcheck failed 3 times in a row
+            send-on-resolved: true
+            failure-threshold: 3
+            success-threshold: 3
+default-endpoint:
+    group: Websites
+    interval: 15m
+    alerts:
+        - type: slack
+    conditions:
+        - '[STATUS] == 200'
+        - '[RESPONSE_TIME] < 1000'
+        # 5 min minimum
+        - '[DOMAIN_EXPIRATION] > 720h'
+        - '[CERTIFICATE_EXPIRATION] > 240h'
+internal-endpoint:
+    group: Cluster
+    interval: 5m
+    alerts:
+        - type: slack
+    conditions:
+        - '[CONNECTED] == true'
+        - '[RESPONSE_TIME] < 200'
+endpoints:
+    - name: garymcdermott
+      !!merge <<:
+        group: Websites
+        interval: 15m
+        alerts:
+            - type: slack
+        conditions:
+            - '[STATUS] == 200'
+            - '[RESPONSE_TIME] < 1000'
+            # 5 min minimum
+            - '[DOMAIN_EXPIRATION] > 720h'
+            - '[CERTIFICATE_EXPIRATION] > 240h'
+      url: https://garymcdermott.net/
+    #- name: celestialindustries
+    #  <<: *defaults
+    #  url: "https://celestialindustries.info/"
+    #  conditions:
+    #    - "[RESPONSE_TIME] < 1500"
+    #    - "[STATUS] == 200"
+    #    - "[DOMAIN_EXPIRATION] > 720h" # 5min minium
+    #    - "[CERTIFICATE_EXPIRATION] > 240h"
+    - name: Telecentro
+      !!merge <<:
+        group: Cluster
+        interval: 5m
+        alerts:
+            - type: slack
+        conditions:
+            - '[CONNECTED] == true'
+            - '[RESPONSE_TIME] < 200'
+      group: Network
+      url: icmp://192.168.0.1
+    # - name: Telecentro-login
+    #   <<: *internal
+    #   group: Network
+    #   url: "icmp://192.168.0.1"
+    #- name: Mikrotik
+    #  <<: *internal
+    #  group: Network
+    #  url: "icmp://192.168.0.98"
+    - name: control
+      !!merge <<:
+        group: Cluster
+        interval: 5m
+        alerts:
+            - type: slack
+        conditions:
+            - '[CONNECTED] == true'
+            - '[RESPONSE_TIME] < 200'
+      url: icmp://192.168.0.66
+    - name: node-1
+      !!merge <<:
+        group: Cluster
+        interval: 5m
+        alerts:
+            - type: slack
+        conditions:
+            - '[CONNECTED] == true'
+            - '[RESPONSE_TIME] < 200'
+      url: icmp://192.168.0.65
+    - name: node-2
+      !!merge <<:
+        group: Cluster
+        interval: 5m
+        alerts:
+            - type: slack
+        conditions:
+            - '[CONNECTED] == true'
+            - '[RESPONSE_TIME] < 200'
+      url: icmp://192.168.0.64
+    - name: node-3
+      !!merge <<:
+        group: Cluster
+        interval: 5m
+        alerts:
+            - type: slack
+        conditions:
+            - '[CONNECTED] == true'
+            - '[RESPONSE_TIME] < 200'
+      url: icmp://192.168.0.63
+      #- name: zero-1
+      #  <<: *internal
+      #  url: "icmp://192.168.1.61"
+      #  group: Monitoring
+      #- name: zero-2
+      #  <<: *internal
+      #  url: "icmp://192.168.1.62"
+      #  group: Monitoring
+      #- name: zero-1 Prometheus
+      #  <<: *internal
+      #  url: "http://192.168.1.83:9090/-/healthy"
+      #  group: Monitoring
+      #  conditions:
+      #    - "[CONNECTED] == true"
+      #    - "[RESPONSE_TIME] < 200"
+      #    - "[BODY] == Prometheus is Healthy."
+      ## TODO turning off for multi arch build setup
+      # - name: Prometheus-service
+      #   <<: *internal
+      #   group: Services
+      #   url: "http://192.168.0.241/-/healthy"
+      #   conditions:
+      #     - "[STATUS] == 200"
+      #     - "[RESPONSE_TIME] < 1000"
+      #     - "[BODY] == Prometheus is Healthy."
+      # - name: Grafana-service
+      #   <<: *internal
+      #   group: Services
+      #   url: "http://192.168.0.242/api/health"
+      #   conditions:
+      #     - "[STATUS] == 200"
+      #     - "[RESPONSE_TIME] < 1000"
+      #     - "[BODY].database == ok"
+# Needs ssh password auth to be on, not ideal
+# etc/ssh/sshd_config to contain PasswordAuthentication yes
+# has to use v.5.6.0 at minium
+# - name: ssh-example
+#   url: "ssh://192.168.0.66:22" # port is optional. Default is 22.
+#   group: ssh
+#   ssh:
+#     username: "pi"
+#     password: "chefVancouver866"
+#   body: |
+#     {
+#       "command": "uptime"
+#     }
+#   interval: 1m
+#   conditions:
+#     - "[CONNECTED] == true"
+#     - "[STATUS] == 0"
+#
+# - name: ssh-example-2
+#   url: "ssh://192.168.0.65:22" # port is optional. Default is 22.
+#   group: ssh
+#   ssh:
+#     username: "pi"
+#     password: "chefVancouver866"
+#   body: |
+#     {
+#       "command": "uptime"
+#     }
+#   interval: 1m
+#   conditions:
+#     - "[CONNECTED] == true"
+#     - "[STATUS] == 0"
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age148cexwa3lg8m7qxh6tdw90q2ntpngx2v8kvjw2xcdkp6kpq7n5nsxls8k8
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAwempvdE9jMGw5OFRXUGlp
+            WWRVeld4ZkRZM3hhNlAyU0trdHIxRVRoQW5nCnlyMmpxV1lUNWZIQ3dYZERqdEpi
+            ZHN4M1JUZTdvSzN1L3I3YW1EWDNhUjQKLS0tIFZ0bFY0cFdTMFpFSkhzY1FJZmc3
+            b3JCRWRsY3BEUEk1c3h2ZkczcXA3OVEKxOyKR8O8OnrLzAffycjYzZmPYug75pbo
+            H85Rs+2m7Q80UYljlcQ/Kh63uaieqdXNyqQP6iz0RlLVVbEMVnXeTA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-12-02T20:03:07Z"
+    mac: ENC[AES256_GCM,data:p5zsQ5YFHpTpNNZJ/bs4b6DpXZ01Ve9++pFdtGVHoEuOsd35duzeQC6qL42ykuosVv0Lsz9+mkbE+tO+NlbshaxZz81ln+rayZbJfWzBjAZh6Z6ZxyGWcVVuJtjen4RAH4jS20pgvJm1Mhc6wGtp+btFBnxzHpaygR8m/k0KVII=,iv:jvb2+40Uhs/6M3KIXHt9zig+KmcOT/F0goo1RZI5wz4=,tag:l/kXf/06+jJFAxENMrTfuQ==,type:str]
+    pgp: []
+    encrypted_regex: ^(webhook-url)$
+    version: 3.7.2
