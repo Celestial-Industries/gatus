@@ -31,11 +31,19 @@ jobs:
         with:
           go-version: ${{ steps.get-go-version.outputs.go_version }}
 
+      - name: Debug1
+        run: |
+          ls -la
+
       - name: Build Gatus Go binary
         run: |
           # From Gatus Dockerfile
           CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus .
 
+      - name: Debug2
+        run: |
+          ls -la
+          
       # - name: Build and Publish
       #   uses: mplatform/mplatform@v4
       #   with:
