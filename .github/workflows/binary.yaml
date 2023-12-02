@@ -23,7 +23,7 @@ jobs:
           go_version=$(grep -oP '^go \K[^\s]+' go.mod)
 
           # Set up Go with the extracted version
-          echo "::set-output name=go_version::$go_version"
+          echo "go_version=$go_version" >> $GITHUB_ENV
         shell: bash
       
       - name: Debug
