@@ -26,11 +26,17 @@ jobs:
           echo $SOPS_VERSION
           echo "SOPS_VERSION=$SOPS_VERSION" >> $GITHUB_ENV
 
+      - name: Debug-1
+        run: |
+          echo ${{ steps.get-sops-version.outputs.SOPS_VERSION }}
+          echo ''
+          echo '${{ steps.get-sops-version.outputs.SOPS_VERSION }}'
+
       - name: Sops Binary Installer
+        id: install-sops
         uses: mdgreenwald/mozilla-sops-action@v1
         with:
           version: '${{ steps.get-sops-version.outputs.SOPS_VERSION }}'
-        #id: install
 
       - name: Get SOPS latest semantic version
         run: |
