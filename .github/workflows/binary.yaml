@@ -31,23 +31,17 @@ jobs:
         with:
           go-version: ${{ steps.get-go-version.outputs.go_version }}
 
-      - name: Build Gatus Go binary
+      - name: Build Gatus Go binaries (linux, arm, arm64)
         run: |
           # From Gatus Dockerfile
           CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus-linux .
           # ARM builds # might be easier to us native go ability see: https://github.com/TwiN/gatus/tree/master#installing-as-binary
-          CGO_ENABLED=0 GOOS=linux GOARCH=linux/arm go build -a -installsuffix cgo -o gatus-linux-arm .
-          CGO_ENABLED=0 GOOS=linux GOARCH=linux/arm64 go build -a -installsuffix cgo -o gatus-linux-arm64 .
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -a -installsuffix cgo -o gatus-linux-arm .
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o gatus-linux-arm64 .
 
       - name: Debug-1
         run: |
           ls -la | grep gatus-linux
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: gatus
-          path: ./gatus
 
       - name: Upload linux artifact
         uses: actions/upload-artifact@v3
