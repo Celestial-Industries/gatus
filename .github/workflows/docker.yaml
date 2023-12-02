@@ -33,7 +33,6 @@ jobs:
         #id: install
 
       - name: Get SOPS latest semantic version
-        id: get-sops-version
         run: |
           sops --version
           sops --decrypt ./config.enc.yaml > config.yaml 
