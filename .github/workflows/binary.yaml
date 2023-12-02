@@ -40,7 +40,7 @@ jobs:
           # From Gatus Dockerfile
           CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus .
 
-      - name: Debug2
+      - name: Debug-2
         run: |
           ls -la
 
@@ -49,6 +49,29 @@ jobs:
         with:
           name: gatus
           path: ./gatus
+
+      - name: Create dist dir for artifacts
+        run: |
+          mkdir dist
+
+      - name: Generate build files
+        uses: thatisuday/go-cross-build@v1
+        with:
+          platforms: 'linux/386, linux/amd64, linux/arm, linux/arm64'
+          name: 'gatus'
+          package: ''
+          compress: 'true'
+          dest: 'dist'
+
+      - name: Debug-3
+        run: |
+          ls -la ./dist
+
+      - name: Upload Artifact folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: gatus-folder
+          path: ./dist/*
 
       # - name: Build and Publish
       #   uses: mplatform/mplatform@v4
