@@ -19,33 +19,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup AGE key for decryption for SOPS
+        run: |
+          echo ${{ secrets.AGE_KEY }} > key.txt
+
       - name: Get SOPS latest semantic version
         id: get-sops-version
         run: |
-          #SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | grep -oP '"tag_name": "\K[^"]+')
           SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | grep -oP '"tag_name": "\K[^"]+' | sed 's/^v//')
-          echo $SOPS_VERSION
           echo "SOPS_VERSION=$SOPS_VERSION" >> $GITHUB_ENV
-
-      - name: Debug-1
-        run: |
           echo $SOPS_VERSION
 
-      - name: Install SOPS
+      - name: Install SOPS from deb package
         id: install-sops
         run: |
           echo $SOPS_VERSION
           URL="https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops_${SOPS_VERSION}_amd64.deb"
           wget $URL -O sops.deb
           sudo dpkg -i sops.deb
-
-      # - name: Sops Binary Installer
-      #   id: install-sops
-      #   uses: mdgreenwald/mozilla-sops-action@v1
-      #   # with:
-      #   #   version: '$SOPS_VERSION'
-#https://github.com/getsops/sops/releases/download/v3.8.1/sops_3.8.1_amd64.deb
-
 
       - name: SOPS decrypt
         run: |
