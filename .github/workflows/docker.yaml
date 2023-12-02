@@ -7,14 +7,7 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     platform:
-    #       - linux/amd64
-    #       - linux/arm/v6
-    #       - linux/arm/v7
-    #       - linux/arm64    
+    runs-on: ubuntu-latest 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,12 +36,6 @@ jobs:
         run: |
           sops --decrypt --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") ./config.enc.yaml > config.yaml 
 
-      - name: Debug-1
-        run: |
-          cat config.yaml
-          echo ''
-          cat config.enc.yaml
-
       - name: Set up QEMU
         id: Set_up_QEMU
         uses: docker/setup-qemu-action@v3.0.0
@@ -70,7 +57,6 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm,linux/arm64
-          #platforms: ${{ matrix.platform }}
           push: true
           tags: mcdermg/gatus:latest
 
