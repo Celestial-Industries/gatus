@@ -16,8 +16,8 @@ jobs:
           repository: 'TwiN/gatus'
           ref: 'master'
 
-      - name: Set up Go
-        id: setup-go
+      - name: Get Go version
+        id: get-go-version
         run: |
           # Extract Go version from go.mod
           go_version=$(grep -oP '^go \K[^\s]+' go.mod)
@@ -28,12 +28,12 @@ jobs:
       
       - name: Debug
         run: |
-          echo ${{ steps.setup-go.outputs.go_version }} | sed 's/./& /g'
+          echo ${{ steps.get-go-version.outputs.go_version }} | sed 's/./& /g'
 
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: ${{ steps.setup-go.outputs.go_version }}
+          go-version: ${{ steps.get-go-version.outputs.go_version }}
 
       # - name: Build and Publish
       #   uses: mplatform/mplatform@v4
