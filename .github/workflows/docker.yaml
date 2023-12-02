@@ -29,7 +29,7 @@ jobs:
       - name: Sops Binary Installer
         uses: mdgreenwald/mozilla-sops-action@v1
         with:
-          version: ${{ steps.get-sops-version.outputs.SOPS_VERSION }}
+          version: '${{ steps.get-sops-version.outputs.SOPS_VERSION }}'
         #id: install
 
       - name: Get SOPS latest semantic version
