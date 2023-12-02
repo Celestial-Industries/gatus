@@ -31,18 +31,17 @@ jobs:
         with:
           go-version: ${{ steps.get-go-version.outputs.go_version }}
 
-      - name: Debug1
-        run: |
-          ls -la
-
       - name: Build Gatus Go binary
         run: |
           # From Gatus Dockerfile
-          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus .
+          CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus-linux .
+          # ARM builds # might be easier to us native go ability see: https://github.com/TwiN/gatus/tree/master#installing-as-binary
+          CGO_ENABLED=0 GOOS=linux GOARCH=linux/arm go build -a -installsuffix cgo -o gatus-linux-arm .
+          CGO_ENABLED=0 GOOS=linux GOARCH=linux/arm64 go build -a -installsuffix cgo -o gatus-linux-arm64 .
 
-      - name: Debug-2
+      - name: Debug-1
         run: |
-          ls -la
+          ls -la | grep gatus-linux
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -50,75 +49,20 @@ jobs:
           name: gatus
           path: ./gatus
 
-      - name: Create dist dir for artifacts
-        run: |
-          mkdir dist
-
-      - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
-        with:
-          platforms: 'linux/386, linux/amd64, linux/arm, linux/arm64'
-          name: 'gatus'
-          package: ''
-          compress: 'true'
-          dest: 'dist'
-
-      - name: Debug-3
-        run: |
-          ls -la ./dist
-
-      - name: Upload Artifact folder
+      - name: Upload linux artifact
         uses: actions/upload-artifact@v3
         with:
-          name: gatus-folder
-          path: ./dist/*
-
-      # - name: Build and Publish
-      #   uses: mplatform/mplatform@v4
-      #   with:
-      #     targets: linux/amd64,linux/arm64  # Specify the architectures you want to build for
-      #     build_args: -o myapp  # Specify your build command and output name
+          name: gatus-linux
+          path: ./gatus-linux
   
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: release
-      #     path: myapp
-
-      # - name: Generate build files
-      #   uses: thatisuday/go-cross-build@v1
-      #   with:
-      #       platforms: 'linux/amd64, darwin/amd64, windows/amd64'
-      #       package: 'demo'
-      #       name: 'program'
-      #       compress: 'true'
-      #       dest: 'dist'
-
-
-#linux/386
-#linux/amd64
-#linux/arm
-#linux/arm64
-
-
-      # - name: Set up Go
-      #   uses: actions/setup-go@v2
-      #   with:
-      #     go-version: 1.17
-
-      # - name: Build and Save Binaries
-      #   run: |
-      #     go build -o binary-linux-amd64 ./path/to/main.go
-      #     go build -o binary-linux-arm64 ./path/to/main.go
-      #     go build -o binary-windows-amd64.exe ./path/to/main.go
-      #     go build -o binary-darwin-amd64 ./path/to/main.go
-
-      # - name: Upload Binaries
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: binaries
-      #     path: |
-      #       binary-linux-amd64
-      #       binary-linux-arm64
-      #       binary-windows-amd64.exe
-      #       binary-darwin-amd64
+      - name: Upload linux ARM artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gatus-linux-arm
+          path: ./gatus-linux-arm
+  
+      - name: Upload linux ARM64 artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gatus-linux-arm64
+          path: ./gatus-linux-arm64
