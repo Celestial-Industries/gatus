@@ -50,6 +50,7 @@ In the GH workflows for GH action for docker SOPS is installed and the AGE key i
 To edit the `config.enc.yaml` locally run:
 
 ``` bash
+export SOPS_AGE_KEY_FILE=$(pwd)'/key.txt'
 sops --decrypt ./config.enc.yaml > conifg.yaml
 sops --encrypt --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") --encrypted-regex '^(webhook-url)$' ./config.yaml > config.enc.yaml
 ```
