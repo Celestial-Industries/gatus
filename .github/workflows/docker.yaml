@@ -55,7 +55,7 @@ jobs:
 
       - name: Build and push
         id: build_and_publish
-        uses: docker/build-push-action@v5.2.0
+        uses: docker/build-push-action@v5.3.0
         with:
           context: .
           platforms: linux/amd64,linux/arm,linux/arm64
