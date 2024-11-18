@@ -1,6 +1,6 @@
 # Gatus
 
-Light weight status and monitoring tool. This repo contains config for buildin a multi arch Docker image and also creating binary for running on Pi Zero to monitor various endpoints. Docker image is opushed to DockerHub and the biary stored as an artifact in GitHub.
+Light weight status and monitoring tool. This repo contains config for building a multi arch Docker image and also creating binary for running on Pi Zero to monitor various endpoints. The container image is pushed to GitHub Container Registry and the binary also stored as an artifact in GitHub.
 
 For reference and documentation on Gatus see:
 
@@ -17,11 +17,16 @@ Various [conditions](https://gatus.io/docs/conditions) are used to evaluate the 
 
 ## Alerting 
 
-It also intergrates with several tools for alerting. [Slack](https://gatus.io/docs/alerting-slack) is the chosen method in this case. The Slack app can be found [here](https://api.slack.com/apps/A055J67H126/install-on-team) and the Webhook URL can be rotated if required.
+It also integrates with several tools for alerting. [Slack](https://gatus.io/docs/alerting-slack) is the chosen method in this case. The Slack app can be found [here](https://api.slack.com/apps/A055J67H126/install-on-team) and the Webhook URL can be rotated if required.
 
 ## Docker Image
 
-Builds an image for Linux and Arm. Pushes to [DockerHub]()
+Builds an image for Linux and Arm. Pushes to [GitHub Artifact Registry]().
+Pull the image via:
+
+```
+docker pull ghcr.io/celestial-industries/gatus/gatus:latest
+```
 
 ## Binary
 
@@ -59,3 +64,13 @@ Remove unencrypted file afterwards although it is excluded via `.gitignore` if n
 ``` bash
 rm config.yaml
 ```
+
+## GitHub Container Registry
+
+GitHub Container registry (GHCR) is used to store the image and need to authenticate to the registry in order to pull the image. Ensure using a PAT to auth to GH cli and then run:
+
+```
+gh auth token | docker login ghcr.io -u $USERNAME --password-stdin
+```
+
+The PAT needs certain permissions to read from packages.

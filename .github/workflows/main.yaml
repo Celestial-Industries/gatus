@@ -2,12 +2,21 @@ name: build and push image
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - feature/migrate-from-dockerhub-to-gh-registry
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
-  docker:
-    runs-on: ubuntu-latest 
+  container_build_and_push:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      actions: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,19 +48,24 @@ jobs:
           sops --decrypt --age $(cat $SOPS_AGE_KEY_FILE | grep -oP "public key: \K(.*)") ./config.enc.yaml > config.yaml 
 
       - name: Set up QEMU
-        id: Set_up_QEMU
+        id: set_up_qemu
         uses: docker/setup-qemu-action@v3.2.0
 
       - name: Set up Docker Buildx
-        id: Set_up_Docker_Buildx
+        id: set_up_docker_buildx
         uses: docker/setup-buildx-action@v3.7.1
 
-      - name: Login to DockerHub
-        id: Login_to_DockerHub
+      - name: Login to GHCR
+        id: login_to_ghcr
         uses: docker/login-action@v3.3.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lowercase GH org name
+        run: |
+            echo "ORG=${GITHUB_REPOSITORY@L}" >> "${GITHUB_ENV}"
 
       - name: Build and push
         id: build_and_publish
@@ -60,7 +74,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm,linux/arm64
           push: true
-          tags: mcdermg/gatus:latest
+          tags: ${{ env.REGISTRY }}/${{ env.ORG }}/gatus:latest
 
       - uses: act10ns/slack@v2.1.0
         env:
