@@ -36,7 +36,7 @@ jobs:
           # From Gatus Dockerfile
           CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gatus-linux .
           # ARM builds # might be easier to us native go ability see: https://github.com/TwiN/gatus/tree/master#installing-as-binary
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -a -installsuffix cgo -o gatus-linux-arm .
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -a -installsuffix cgo -o gatus-linux-arm .
           CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o gatus-linux-arm64 .
 
       - name: Upload linux artifact
