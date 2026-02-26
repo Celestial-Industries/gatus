@@ -40,19 +40,19 @@ jobs:
           CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o gatus-linux-arm64 .
 
       - name: Upload linux artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: gatus-linux
           path: ./gatus-linux
   
       - name: Upload linux ARM artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: gatus-linux-arm
           path: ./gatus-linux-arm
   
       - name: Upload linux ARM64 artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: gatus-linux-arm64
           path: ./gatus-linux-arm64
