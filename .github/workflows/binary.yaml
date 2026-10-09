@@ -16,20 +16,10 @@ jobs:
           repository: 'TwiN/gatus'
           ref: 'master'
 
-      - name: Get Go version
-        id: get-go-version
-        run: |
-          # Extract Go version from go.mod in Gatus repo
-          go_version=$(grep -oP '^go \K[^\s]+' go.mod)
-
-          # Set up Go with the extracted version
-          echo "go_version=$go_version" >> $GITHUB_ENV
-        shell: bash
-      
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
-          go-version: ${{ steps.get-go-version.outputs.go_version }}
+          go-version-file: go.mod
 
       - name: Build Gatus Go binaries (linux, arm, arm64)
         run: |
